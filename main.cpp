@@ -23,7 +23,7 @@ void clearPlayer() {
 }
 
 void drawPlayer() {
-    setColor(BLUE);
+    setColor(WHITE);
     draw('@', px, py);
 }
 
@@ -33,12 +33,12 @@ void drawTreasure() {
 }
 
 void drawMap() {
-    setColor(WHITE);
+    setColor(BLACK);
 
     for(int y=0; y<getWindowHeight(); y++) {
         for(int x=0; x<getWindowWidth(); x++) {
             if(!tileMap[x][y]) {
-                draw('#', x, y);
+                draw((char)219, x, y);
             }
         }
     }
@@ -94,6 +94,35 @@ void playerControll() {
     drawPlayer();
 }
 
+bool isWon() {
+    return (px == tx) && (py == ty);
+}
+
+void initGame() {
+    // Generate the map
+    for(int y=0; y<getWindowHeight(); y++) {
+        for(int x=0; x<getWindowWidth(); x++) {
+            bool isWall = false;
+            tileMap[x][y] = rand() % 100 < 70;
+        }
+    }
+
+    // Generate the player position
+    px = rand() % getWindowWidth();
+    py = rand() % getWindowHeight();
+
+    // Generate the treasure position
+    tx = rand() % getWindowWidth();
+    ty = rand() % getWindowHeight();
+
+    tileMap[px][py] = true;
+    tileMap[tx][ty] = true;
+
+    // Display everything
+    drawMap();
+    drawPlayer();
+    drawTreasure();
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -104,32 +133,16 @@ int main()
 
     srand(time(NULL));
 
-    // Generate the map
-    for(int y=0; y<getWindowHeight(); y++) {
-        for(int x=0; x<getWindowWidth(); x++) {
-            bool isWall = false;
-            tileMap[x][y] = rand() % 100 < 70;
-        }
-    }
-
-    tileMap[px][py] = true;
-    tileMap[tx][ty] = true;
-
-    // Generate the player position
-    px = rand() % getWindowWidth();
-    py = rand() % getWindowHeight();
-
-    // Generate the treasure position
-    tx = rand() % getWindowWidth();
-    ty = rand() % getWindowHeight();
-
-    // Display everything
-    drawMap();
-    drawPlayer();
-    drawTreasure();
+    initGame();
 
     while(true) {
         playerControll();
+
+        if(isWon()) {
+            // Clear previous frame
+            cls();
+            initGame();
+        }
     }
 
     return 0;

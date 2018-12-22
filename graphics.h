@@ -36,6 +36,9 @@ void setBackgroundColor(int);
 // Set color of next displaying text
 extern void setColor(int);
 
+// Clear screen
+extern void cls();
+
 // Draw on screen (what, x, y)
 extern void draw(char, int, int);
 extern void draw(std::string, int, int);

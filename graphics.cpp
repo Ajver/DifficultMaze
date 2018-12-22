@@ -111,6 +111,10 @@ void fillRectangle(char c, int x, int y, int w, int h) {
     }
 }
 
+void cls() {
+    system("cls");
+}
+
 bool inScreen(int x, int y) {
     return
         x >= 0   &&
